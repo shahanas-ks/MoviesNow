@@ -2,7 +2,7 @@
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
+import Genres from "layouts/genres";
 import Languages from "layouts/languages";
 import Countries from "layouts/countries";
 import SignIn from "layouts/authentication/sign-in";
@@ -39,10 +39,10 @@ const routes = [
   {
     type: "collapse",
     name: "Genres",
-    key: "rtl",
+    key: "genres",
     icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
+    route: "/genres",
+    component: <Genres />,
   },
   {
     type: "collapse",
