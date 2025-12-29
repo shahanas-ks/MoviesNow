@@ -1,6 +1,6 @@
 
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Movies from "layouts/movies";
 import Persons from "layouts/persons";
 import Genres from "layouts/genres";
 import Languages from "layouts/languages";
@@ -23,10 +23,10 @@ const routes = [
   {
     type: "collapse",
     name: "Movies",
-    key: "tables",
+    key: "movies",
     icon: <Icon fontSize="small">movies</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    route: "/movies",
+    component: <Movies />,
   },
   {
     type: "collapse",

@@ -57,6 +57,10 @@ const colors = {
     main: "#7b809a",
     focus: "#8f93a9",
   },
+  secondarys: {
+    main: "#191919",
+    focus: "#191919",
+  },
 
   info: {
     main: "#1A73E8",
@@ -109,6 +113,10 @@ const colors = {
     secondary: {
       main: "#747b8a",
       state: "#495361",
+    },
+    secondarys: {
+      main: "#191919",
+      state: "#191919",
     },
 
     info: {
@@ -218,6 +226,10 @@ const colors = {
       background: "#d7d9e1",
       text: "#6c757d",
     },
+    secondarys: {
+      background: "#191919",
+      text: "#191919",
+    },
 
     info: {
       background: "#aecef7",
@@ -257,6 +269,7 @@ const colors = {
   coloredShadows: {
     primary: "#e91e62",
     secondary: "#110e0e",
+    secondarys: "#191919",
     info: "#00bbd4",
     success: "#4caf4f",
     warning: "#ff9900",
