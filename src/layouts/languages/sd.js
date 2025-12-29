@@ -114,11 +114,11 @@ function Notifications() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mt={6} mb={3}>
-        <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} lg={8}>
+        <Grid container spacing={3} justifyContent="flex-start">
+          <Grid item xs={12} lg={12}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Alerts</MDTypography>
+                <MDTypography variant="h5">Languages</MDTypography>
               </MDBox>
               <MDBox pt={2} px={2}>
                 <MDAlert color="primary" dismissible>

@@ -15,8 +15,8 @@ Coded by www.creative-tim.com
 function collapseItem(theme, ownerState) {
   const { palette, transitions, breakpoints, boxShadows, borders, functions } = theme;
   const { active, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = ownerState;
-  console.log("active", active);
-  console.log("sidenavColor", sidenavColor);
+  // console.log("active", active);
+  // console.log("sidenavColor", sidenavColor);
 
   const { white, transparent, dark, grey, gradients } = palette;
   const { md } = boxShadows;

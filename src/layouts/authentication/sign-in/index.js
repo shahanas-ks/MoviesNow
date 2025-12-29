@@ -1,59 +1,113 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
-// react-router-dom components
-import { Link } from "react-router-dom";
-
-// @mui material components
+import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-
-// Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-
-// Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import { loginUser } from "../../../apiCalls/login";
+import { useNavigate } from "react-router-dom";
+import MDSnackbar from "components/MDSnackbar";
 
 function Basic() {
+  const [openSnack, setOpenSnack] = useState(false);
+  const [message, setMessage] = useState("");
+
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth || {});
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    // grant_type: "password",
+    // // scope: "",
+    // client_id: "string",
+    // client_secret: "********",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  // 🔹 Email regex validation
+  const isValidEmail = (username) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username);
+
+  // 🔹 Handle input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const closeSnackbar = () => {
+    setMessage("");
+    setOpenSnack(false);
+  };
+
+  // 🔹 Validate form
+  const validate = () => {
+    let tempErrors = {};
+
+    if (!formData.username) {
+      tempErrors.username = "Email is required";
+    } else if (!isValidEmail(formData.username)) {
+      tempErrors.username = "Enter a valid username address";
+    }
+
+    if (!formData.password) {
+      tempErrors.password = "Password is required";
+    } else if (formData.password.length < 2) {
+      tempErrors.password = "Password must be at least 2 characters";
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  // 🔹 Submit handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validate()) return;
+
+    dispatch(loginUser(formData)).then((res) => {
+      if (res?.payload?.data?.access_token) {
+        setMessage("Logged in successfully");
+        setOpenSnack(true);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
+      } else {
+        setMessage("Please check the credentials and try again.");
+        setOpenSnack(true);
+      }
+    });
+  };
 
   return (
     <BasicLayout image={bgImage}>
+      <MDSnackbar
+        color={message?.includes("successfully") ? "success" : "error"}
+        icon={message?.includes("successfully") ? "check" : "warning"}
+        title={message?.includes("successfully") ? "Success" : "Error"}
+        content={message}
+        // dateTime="11 mins ago"
+        open={openSnack}
+        onClose={closeSnackbar}
+        close={closeSnackbar}
+        bgWhite
+      />
       <Card>
         <MDBox
           variant="gradient"
-          bgColor="info"
+          bgColor="added"
           borderRadius="lg"
-          coloredShadow="info"
+          coloredShadow="added"
           mx={2}
           mt={-3}
           p={2}
@@ -63,63 +117,56 @@ function Basic() {
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign in
           </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-          </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
+            {/* EMAIL */}
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
-            </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleSetRememberMe}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Remember me
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
-                <MDTypography
-                  component={Link}
-                  to="/authentication/sign-up"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  Sign up
+              <MDInput
+                type="username"
+                label="Email"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                fullWidth
+                error={Boolean(errors.username)}
+              />
+              {errors.username && (
+                <MDTypography variant="caption" color="error">
+                  {errors.username}
                 </MDTypography>
-              </MDTypography>
+              )}
+            </MDBox>
+
+            {/* PASSWORD */}
+            <MDBox mb={2}>
+              <MDInput
+                type="text"
+                label="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                fullWidth
+                error={Boolean(errors.password)}
+              />
+              {errors.password && (
+                <MDTypography variant="caption" color="error">
+                  {errors.password}
+                </MDTypography>
+              )}
+            </MDBox>
+
+            {/* SUBMIT */}
+            <MDBox mt={4} mb={1}>
+              <MDButton
+                type="submit"
+                variant="gradient"
+                color="added"
+                fullWidth
+                disabled={loading}
+              >
+                {loading ? "Signing in..." : "Sign In"}
+              </MDButton>
             </MDBox>
           </MDBox>
         </MDBox>

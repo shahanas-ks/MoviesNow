@@ -48,6 +48,10 @@ const colors = {
     main: "#e91e63",
     focus: "#e91e63",
   },
+  added: {
+    main: "#FF1717",
+    focus: "#FF1717",
+  },
 
   secondary: {
     main: "#7b809a",
@@ -110,6 +114,10 @@ const colors = {
     info: {
       main: "#49a3f1",
       state: "#1A73E8",
+    },
+    added: {
+      main: "#FF1717",
+      state: "#FF1717",
     },
 
     success: {
@@ -215,6 +223,10 @@ const colors = {
       background: "#aecef7",
       text: "#095bc6",
     },
+    added: {
+      background: "#FF1717",
+      text: "#ffffff",
+    },
 
     success: {
       background: "#bce2be",
@@ -251,6 +263,7 @@ const colors = {
     error: "#f44336",
     light: "#adb5bd",
     dark: "#404040",
+    added: "#FF1717",
   },
 
   inputBorderColor: "#d2d6da",

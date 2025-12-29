@@ -40,7 +40,7 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
+import Languages from "layouts/languages";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -84,10 +84,10 @@ const routes = [
   {
     type: "collapse",
     name: "Languages",
-    key: "notifications",
+    key: "languages",
     icon: <Icon fontSize="small">flags</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
+    route: "/languages",
+    component: <Languages />,
   },
   {
     type: "collapse",
