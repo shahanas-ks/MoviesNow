@@ -4,18 +4,18 @@ import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
-import { addLanguages } from "../../apiCalls/languages";
+import { addCountries } from "../../apiCalls/countries";
 import MDSnackbar from "components/MDSnackbar";
 
-function AddLanguageForm({ onClose }) {
+function AddCountriesForm({ onClose }) {
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const { loading, success, error } = useSelector(
-    (state) => state.languages || {}
+    (state) => state.countries || {}
   );
 
-  const [name, setLanguage] = useState("");
+  const [name, setCountries] = useState("");
   const [code, setCode] = useState("");
 
   const [errors, setErrors] = useState({
@@ -27,11 +27,11 @@ function AddLanguageForm({ onClose }) {
     const newErrors = {};
 
     if (!name.trim()) {
-      newErrors.name = "Language name is required";
+      newErrors.name = "Country name is required";
     }
 
     if (!code.trim()) {
-      newErrors.code = "Language code is required";
+      newErrors.code = "Country code is required";
     } else if (!/^[A-Z]{2,2}$/.test(code)) {
       newErrors.code = "Code must be 2 uppercase letters (e.g. EN, FR)";
     }
@@ -46,19 +46,19 @@ function AddLanguageForm({ onClose }) {
 
     if (!validate()) return;
 
-    dispatch(addLanguages({ name, code })).then((res) => {
+    dispatch(addCountries({ name, code })).then((res) => {
       if (res?.payload?.id) {
         console.log("res", res);
-        setMessage("Language added successfully");
+        setMessage("Country added successfully");
         setOpenSnack(true);
 
         setTimeout(() => {
-          setLanguage("");
+          setCountries("");
           setCode("");
           onClose();
         }, 1000);
       } else {
-        setMessage(res?.payload || "Failed to add language");
+        setMessage(res?.payload || "Failed to add country");
         setOpenSnack(true);
       }
     });
@@ -66,7 +66,7 @@ function AddLanguageForm({ onClose }) {
 
   useEffect(() => {
     if (success) {
-      setLanguage("");
+      setCountries("");
       setCode("");
       setErrors({});
       onClose();
@@ -96,7 +96,7 @@ function AddLanguageForm({ onClose }) {
           fullWidth
           value={name}
           onChange={(e) => {
-            setLanguage(e.target.value);
+            setCountries(e.target.value);
             setErrors((prev) => ({ ...prev, name: "" }));
           }}
           error={Boolean(errors.name)}
@@ -150,4 +150,4 @@ function AddLanguageForm({ onClose }) {
   );
 }
 
-export default AddLanguageForm;
+export default AddCountriesForm;

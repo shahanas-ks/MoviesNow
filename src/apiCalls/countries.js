@@ -16,23 +16,23 @@ languagesClient.interceptors.response.use(
   }
 
 );
-export const addLanguages = createAsyncThunk(
-  "languages/addLanguages",
+export const addCountries = createAsyncThunk(
+  "languages/addCountries",
   async (data, { rejectWithValue }) => {
     console.log("localStorage.getItem('jwt')",localStorage.getItem('jwt'),data)
     try {
-      const res = await languagesClient.post("v1/lookup/languages", data);
+      const res = await languagesClient.post("v1/lookup/countries", data);
       return res.data;
     } catch (err) {
       return rejectWithValue(err?.response?.data || "Failed to add language");
     }
   }
 );
-export const getLanguages = createAsyncThunk(
-  "languages/addLanguages",
+export const getCountries = createAsyncThunk(
+  "languages/addCountries",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await languagesClient.get("v1/lookup/languages");
+      const res = await languagesClient.get("v1/lookup/countries");
       return res.data;
     } catch (err) {
       return rejectWithValue(err?.response?.data || "Failed to add language");

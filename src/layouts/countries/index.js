@@ -9,18 +9,18 @@ import MDSnackbar from "components/MDSnackbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-// import { addLanguage } from "store/reducers/languageThunk";
-// import { resetLanguageState } from "store/reducers/languageSlice";
+// import { addcountry } from "store/reducers/countryThunk";
+// import { resetcountryState } from "store/reducers/countrySlice";
 import MDModal from "components/MDModal";
-import AddLanguageForm from "./addLangg";
-import { addLanguages, getLanguages } from "../../apiCalls/languages";
+import AddcountryForm from "./addcountries";
+import { addCountries, getCountries } from "../../apiCalls/countries";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DataTable from "examples/Tables/DataTable";
 
-function Languages() {
+function Countries() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const [dataList, setdatalist] = useState([]);
@@ -31,7 +31,7 @@ function Languages() {
     loadData();
   }, []);
   const loadData = () => {
-    dispatch(getLanguages()).then((res) => {
+    dispatch(getCountries()).then((res) => {
       console.log("res", res);
       setdatalist(res?.payload);
     });
@@ -76,7 +76,7 @@ function Languages() {
     }
   }, [dataList]);
   const columns = [
-    { Header: "Language", accessor: "name", align: "left" },
+    { Header: "country", accessor: "name", align: "left" },
     { Header: "Code", accessor: "code", align: "center" },
     { Header: "Actions", accessor: "actions", align: "center" },
   ];
@@ -99,9 +99,9 @@ function Languages() {
           setOpen(false);
           loadData();
         }}
-        title="Add Language"
+        title="Add country"
       >
-        <AddLanguageForm
+        <AddcountryForm
           onClose={() => {
             setOpen(false);
             loadData();
@@ -118,14 +118,14 @@ function Languages() {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <MDTypography variant="h5">Languages</MDTypography>
+                <MDTypography variant="h5">Countries</MDTypography>
 
                 <MDButton
                   variant="gradient"
                   color="info"
                   onClick={() => setOpen(true)}
                 >
-                  Add Language
+                  Add country
                 </MDButton>
               </MDBox>
 
@@ -143,7 +143,7 @@ function Languages() {
                 )}
                 {/* {dataList.length === 0 && (
                   <MDAlert color="info" variant="gradient">
-                    No languages found. Please add a language.
+                    No countrys found. Please add a country.
                   </MDAlert>
                 )} */}
               </MDBox>
@@ -157,4 +157,4 @@ function Languages() {
   );
 }
 
-export default Languages;
+export default Countries;
