@@ -1,7 +1,7 @@
 
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
-import Billing from "layouts/billing";
+import Persons from "layouts/persons";
 import Genres from "layouts/genres";
 import Languages from "layouts/languages";
 import Countries from "layouts/countries";
@@ -31,10 +31,10 @@ const routes = [
   {
     type: "collapse",
     name: "Persons",
-    key: "billing",
+    key: "persons",
     icon: <Icon fontSize="small">person</Icon>,
-    route: "/billing",
-    component: <Billing />,
+    route: "/persons",
+    component: <Persons />,
   },
   {
     type: "collapse",

@@ -46,7 +46,6 @@ function AddLanguageForm({ onClose, selectedItem }) {
   };
 
   const handleSubmit = (e) => {
-    console.log("hit");
     e.preventDefault();
 
     if (!validate()) return;
