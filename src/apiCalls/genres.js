@@ -39,10 +39,7 @@ export const updategenres = createAsyncThunk(
   "genres/putgenres",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await genresclient.put(
-        `v1/lookup/genres/${data?.id}/`,
-        data
-      );
+      const res = await genresclient.put(`v1/lookup/genres/${data?.id}/`, data);
       return res.data;
     } catch (err) {
       return rejectWithValue(err?.response?.data || "Failed to add language");

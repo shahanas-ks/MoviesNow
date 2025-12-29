@@ -4,10 +4,11 @@ import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
-import { addGenres } from "../../apiCalls/genres";
+import { addGenres, updategenres } from "../../apiCalls/genres";
 import MDSnackbar from "components/MDSnackbar";
 
-function AddLanguageForm({ onClose }) {
+function AddLanguageForm({ onClose, selectedItem }) {
+  console.log("selectedItem", selectedItem);
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
@@ -22,6 +23,12 @@ function AddLanguageForm({ onClose }) {
     name: "",
     description: "",
   });
+  useEffect(() => {
+    if (selectedItem?.id) {
+      setname(selectedItem?.name);
+      setDescription(selectedItem?.description);
+    }
+  }, [selectedItem]);
 
   const validate = () => {
     const newErrors = {};
@@ -43,6 +50,28 @@ function AddLanguageForm({ onClose }) {
     e.preventDefault();
 
     if (!validate()) return;
+    if(selectedItem?.id){
+      dispatch(updategenres({ name, description, id: selectedItem?.id })).then((res) => {
+      if (res?.payload?.id) {
+        console.log("res", res);
+        setMessage("Genre updated successfully");
+        setOpenSnack(true);
+
+        setTimeout(() => {
+          setname("");
+          setDescription("");
+          onClose();
+        }, 1000);
+      } else {
+        setMessage("Failed to add genre");
+        setOpenSnack(true);
+      }
+    });
+
+    }
+    else{
+
+    
 
     dispatch(addGenres({ name, description })).then((res) => {
       if (res?.payload?.id) {
@@ -59,7 +88,7 @@ function AddLanguageForm({ onClose }) {
         setMessage("Failed to add genre");
         setOpenSnack(true);
       }
-    });
+    });}
   };
 
   useEffect(() => {

@@ -30,6 +30,10 @@ function Genres() {
   const dispatch = useDispatch();
   const [dataList, setdatalist] = useState([]);
   const [rows, setRows] = useState([]);
+  const [selectedItem, setSelecteditem] = useState({});
+  const [deleteId, setdeleteID] = useState("");
+
+
 
   useEffect(() => {
     loadData();
@@ -86,10 +90,14 @@ function Genres() {
   ];
 
   const handleEdit = (item) => {
+    setSelecteditem(item);
+    setOpen(true)
     console.log("Edit clicked:", item);
   };
 
   const handleDelete = (id) => {
+    setdeleteID(id)
+    
     console.log("Delete clicked, id:", id);
   };
 
@@ -110,6 +118,7 @@ function Genres() {
             setOpen(false);
             loadData();
           }}
+          selectedItem={selectedItem}
         />
       </MDModal>
       <MDBox mt={6} mb={3}>
