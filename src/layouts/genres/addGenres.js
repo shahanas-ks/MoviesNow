@@ -50,45 +50,43 @@ function AddLanguageForm({ onClose, selectedItem }) {
     e.preventDefault();
 
     if (!validate()) return;
-    if(selectedItem?.id){
-      dispatch(updategenres({ name, description, id: selectedItem?.id })).then((res) => {
-      if (res?.payload?.id) {
-        console.log("res", res);
-        setMessage("Genre updated successfully");
-        setOpenSnack(true);
+    if (selectedItem?.id) {
+      dispatch(updategenres({ name, description, id: selectedItem?.id })).then(
+        (res) => {
+          if (res?.payload?.id) {
+            console.log("res", res);
+            setMessage("Genre updated successfully");
+            setOpenSnack(true);
 
-        setTimeout(() => {
-          setname("");
-          setDescription("");
-          onClose();
-        }, 1000);
-      } else {
-        setMessage("Failed to add genre");
-        setOpenSnack(true);
-      }
-    });
+            setTimeout(() => {
+              setname("");
+              setDescription("");
+              onClose();
+            }, 1000);
+          } else {
+            setMessage("Failed to add genre");
+            setOpenSnack(true);
+          }
+        }
+      );
+    } else {
+      dispatch(addGenres({ name, description })).then((res) => {
+        if (res?.payload?.id) {
+          console.log("res", res);
+          setMessage("Genre added successfully");
+          setOpenSnack(true);
 
+          setTimeout(() => {
+            setname("");
+            setDescription("");
+            onClose();
+          }, 1000);
+        } else {
+          setMessage("Failed to add genre");
+          setOpenSnack(true);
+        }
+      });
     }
-    else{
-
-    
-
-    dispatch(addGenres({ name, description })).then((res) => {
-      if (res?.payload?.id) {
-        console.log("res", res);
-        setMessage("Genre added successfully");
-        setOpenSnack(true);
-
-        setTimeout(() => {
-          setname("");
-          setDescription("");
-          onClose();
-        }, 1000);
-      } else {
-        setMessage("Failed to add genre");
-        setOpenSnack(true);
-      }
-    });}
   };
 
   useEffect(() => {

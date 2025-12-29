@@ -13,27 +13,24 @@ import Footer from "examples/Footer";
 // import { resetGenrestate } from "store/reducers/Genreslice";
 import MDModal from "components/MDModal";
 import AddGenresForm from "./addGenres";
-import {
-  addGenres,
-  getGenres,
-  deletegenres,
-  updategenres,
-} from "../../apiCalls/genres";
+import { addGenres, getGenres, deletegenres } from "../../apiCalls/genres";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DataTable from "examples/Tables/DataTable";
+import ConfirmDialog from "components/MDConfirmation";
 
 function Genres() {
+  const [openSnack, setOpenSnack] = useState(false);
+  const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const [dataList, setdatalist] = useState([]);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [rows, setRows] = useState([]);
   const [selectedItem, setSelecteditem] = useState({});
-  const [deleteId, setdeleteID] = useState("");
-
-
+  const [selectedId, setSelectedId] = useState("");
 
   useEffect(() => {
     loadData();
@@ -91,19 +88,52 @@ function Genres() {
 
   const handleEdit = (item) => {
     setSelecteditem(item);
-    setOpen(true)
+    setOpen(true);
     console.log("Edit clicked:", item);
   };
 
   const handleDelete = (id) => {
-    setdeleteID(id)
-    
+    setSelectedId(id);
+    console.log("selectedId", id);
+
+    setOpenConfirm(true);
+
     console.log("Delete clicked, id:", id);
+  };
+
+  const handleConfirmDelete = () => {
+    dispatch(deletegenres(selectedId)).then((res) => {
+      if (res?.payload?.id) {
+        console.log("res", res);
+        setMessage("Genre deleted successfully");
+        setOpenSnack(true);
+        loadData();
+      } else {
+        setMessage("Failed to delete genre");
+        setOpenSnack(true);
+      }
+    });
+    setOpenConfirm(false);
+  };
+  const closeSnackbar = () => {
+    setMessage("");
+    setOpenSnack(false);
+    setSelectedId("");
   };
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <MDSnackbar
+        color={message?.includes("successfully") ? "success" : "error"}
+        icon={message?.includes("successfully") ? "check" : "warning"}
+        title={message?.includes("successfully") ? "Success" : "Error"}
+        content={message}
+        open={openSnack}
+        onClose={closeSnackbar}
+        close={closeSnackbar}
+        bgWhite
+      />
 
       <MDModal
         open={open}
@@ -121,6 +151,14 @@ function Genres() {
           selectedItem={selectedItem}
         />
       </MDModal>
+      <ConfirmDialog
+        open={openConfirm}
+        title="Delete Language"
+        description="Are you sure you want to delete this? This action cannot be undone."
+        confirmText="Delete"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setOpenConfirm(false)}
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>

@@ -50,11 +50,15 @@ export const updategenres = createAsyncThunk(
 export const deletegenres = createAsyncThunk(
   "genres/deletegenres",
   async (id, { rejectWithValue }) => {
+    console.log("id in api", id);
     try {
-      const res = await genresclient.delete(`v1/lookup/genress/${id}/`);
-      return res.data;
+      const res = await genresclient.delete(`v1/lookup/genres/${id}/`);
+      return { id, data: res.data }; // return id for reducer update
     } catch (err) {
-      return rejectWithValue(err?.response?.data || "Failed to add language");
+      return rejectWithValue(
+        err?.response?.data || "Failed to delete genre"
+      );
     }
   }
 );
+
