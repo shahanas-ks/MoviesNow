@@ -62,13 +62,13 @@ function Countries() {
                 <EditIcon fontSize="small" />
               </IconButton>
 
-              <IconButton
+              {/* <IconButton
                 color="error"
                 size="small"
                 onClick={() => handleDelete(item.id)}
               >
                 <DeleteIcon fontSize="small" />
-              </IconButton>
+              </IconButton> */}
             </MDBox>
           ),
         }))

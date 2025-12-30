@@ -53,7 +53,7 @@ function Genres() {
 
           description: (
             <MDTypography variant="button" fontWeight="regular">
-              {item.description}
+              {item.description?.slice(0,80)+"..."}
             </MDTypography>
           ),
 
@@ -82,7 +82,7 @@ function Genres() {
   }, [dataList]);
   const columns = [
     { Header: "Genres", accessor: "name", align: "left" },
-    { Header: "Code", accessor: "description", align: "center" },
+    { Header: "Description", accessor: "description", align: "left" },
     { Header: "Actions", accessor: "actions", align: "center" },
   ];
 

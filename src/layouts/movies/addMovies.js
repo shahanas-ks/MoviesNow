@@ -17,7 +17,7 @@ import { addMovie } from "apiCalls/movies";
 import { getpersons } from "../../apiCalls/persons";
 import { getGenres } from "../../apiCalls/genres";
 import { getCountries } from "../../apiCalls/countries";
-import {  getLanguages } from "../../apiCalls/languages";
+import { getLanguages } from "../../apiCalls/languages";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 
@@ -32,9 +32,9 @@ function AddMoviesform({ onClose, selectedItem }) {
     trailer_url: "",
     website: "",
     poster: null,
-    genre_ids: [0],
-    language_ids: [0],
-    country_ids: [0],
+    genre_ids: [],
+    language_ids: [],
+    country_ids: [],
   });
 
   const [errors, setErrors] = useState({});
@@ -47,10 +47,10 @@ function AddMoviesform({ onClose, selectedItem }) {
     loadData();
   }, []);
   const loadData = () => {
-      dispatch(getLanguages()).then((res) => {
-         console.log("res", res);
-         setLanggList(res?.payload);
-       });
+    dispatch(getLanguages()).then((res) => {
+      console.log("res", res);
+      setLanggList(res?.payload);
+    });
     dispatch(getGenres()).then((res) => {
       console.log("res", res);
       setgenresList(res?.payload);
@@ -63,6 +63,16 @@ function AddMoviesform({ onClose, selectedItem }) {
 
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    setErrors((prev) => ({ ...prev, [key]: "" }));
+  };
+  const handleChangeArray = (key, value) => {
+    const valuesArray = Array.isArray(value) ? value : [value];
+
+    setForm((prev) => ({
+      ...prev,
+      [key]: valuesArray.map((v) => Number(v)), // ✅ force numbers
+    }));
+
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
 
@@ -138,6 +148,7 @@ function AddMoviesform({ onClose, selectedItem }) {
     setMessage("");
     setOpenSnack(false);
   };
+  console.log("form", form);
 
   return (
     <MDBox component="form" onSubmit={handleSubmit} width="100%">
@@ -162,7 +173,6 @@ function AddMoviesform({ onClose, selectedItem }) {
             error={Boolean(errors.title)}
           />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <MDInput
             type="date"
@@ -173,7 +183,6 @@ function AddMoviesform({ onClose, selectedItem }) {
             error={Boolean(errors.release_date)}
           />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <MDInput
             select
@@ -181,9 +190,28 @@ function AddMoviesform({ onClose, selectedItem }) {
             fullWidth
             value={form.status}
             onChange={(e) => handleChange("status", e.target.value)}
+            SelectProps={{
+              sx: {
+                minHeight: 44, // ✅ correct height
+                display: "flex",
+                alignItems: "center",
+              },
+            }}
+            InputLabelProps={{
+              shrink: true, // ✅ prevents label overlap
+            }}
+            sx={{
+              "& .MuiInputBase-root": {
+                minHeight: 44,
+                fontSize: 14,
+              },
+            }}
           >
             <MenuItem value="released">Released</MenuItem>
-            <MenuItem value="upcoming">Upcoming</MenuItem>
+            <MenuItem value="filming">Filming</MenuItem>
+            <MenuItem value="announced">Announced</MenuItem>
+            <MenuItem value="postProduction">postProduction</MenuItem>
+            <MenuItem value="cancelled">Cancelled</MenuItem>
           </MDInput>
         </Grid>
 
@@ -199,7 +227,6 @@ function AddMoviesform({ onClose, selectedItem }) {
             error={Boolean(errors.overview)}
           />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <MDInput
             label="Runtime (Hours)"
@@ -209,7 +236,6 @@ function AddMoviesform({ onClose, selectedItem }) {
             onChange={(e) => handleChange("runtime", e.target.value)}
           />
         </Grid>
-
         {/* Row 3 */}
         <Grid item xs={12} md={4}>
           <MDInput
@@ -219,7 +245,6 @@ function AddMoviesform({ onClose, selectedItem }) {
             onChange={(e) => handleChange("trailer_url", e.target.value)}
           />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <MDInput
             label="Website"
@@ -228,81 +253,100 @@ function AddMoviesform({ onClose, selectedItem }) {
             onChange={(e) => handleChange("website", e.target.value)}
           />
         </Grid>
-
         <Grid item xs={12} md={4}>
           <MDTypography variant="caption">Poster</MDTypography> &nbsp;
-       
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleChange("poster", e.target.files[0])}
-            />{" "}
-      
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleChange("poster", e.target.files[0])}
+          />{" "}
         </Grid>
-       <Grid item xs={12} md={4} mt={2}>
-  <FormControl fullWidth size="small">
-    <InputLabel id="genres-label" sx={{ fontSize: 12 }}>
-      Genres
-    </InputLabel>
+        <Grid item xs={12} md={4} mt={2}>
+          <FormControl fullWidth size="small">
+            <InputLabel id="genres-label" sx={{ fontSize: 12 }}>
+              Genres
+            </InputLabel>
+            <Select
+              labelId="genres-label"
+              multiple
+              value={form.genre_ids}
+              label="Genres"
+              onChange={(e) => handleChangeArray("genre_ids", e.target.value)}
+              renderValue={(selected) =>
+                selected
+                  .map((id) => genresList.find((g) => g.id === id)?.name)
+                  .filter(Boolean)
+                  .join(", ")
+              }
+              sx={{ minHeight: 40, fontSize: 14 }}
+            >
+              {genresList.map((genre) => (
+                <MenuItem key={genre.id} value={genre.id}>
+                  <Checkbox checked={form.genre_ids.includes(genre.id)} />
+                  <ListItemText primary={genre.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4} mt={2}>
+          <FormControl fullWidth size="small">
+            <InputLabel id="genres-label" sx={{ fontSize: 12 }}>
+              Countries
+            </InputLabel>
+            <Select
+              labelId="country-label"
+              multiple
+              value={form.country_ids}
+              label="Country"
+              onChange={(e) => handleChangeArray("country_ids", e.target.value)}
+              renderValue={(selected) =>
+                selected
+                  .map((id) => countriesList.find((g) => g.id === id)?.name)
+                  .filter(Boolean)
+                  .join(", ")
+              }
+              sx={{ minHeight: 40, fontSize: 14 }}
+            >
+              {countriesList.map((country) => (
+                <MenuItem key={country.id} value={country.id}>
+                  <Checkbox checked={form.country_ids.includes(country.id)} />
+                  <ListItemText primary={country.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
 
-    <Select
-      labelId="genres-label"
-      multiple
-      value={form.genre_ids}
-      label="Genres"
-      onChange={(e) => handleChange("genre_ids", e.target.value)}
-      renderValue={(selected) => selected.join(", ")}
-      sx={{
-        minHeight: 40,              // ✅ compact height
-        fontSize: 14,
-      }}
-    >
-      {genresList.map((genre) => (
-        <MenuItem key={genre.id} value={genre.id}>
-          <Checkbox size="small" checked={form.genre_ids.includes(genre.id)} />
-          <ListItemText
-            primary={genre.name}
-            primaryTypographyProps={{ fontSize: 14 }}
-          />
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-</Grid>
-            <Grid item xs={12} md={4}>
-          <MDTypography variant="caption">Languages</MDTypography> &nbsp;
-
-          <Select
-            multiple
-            fullWidth
-            value={form.language_ids}
-            onChange={(e) => handleChange("language_ids", e.target.value)}
-            renderValue={(selected) => selected.join(", ")}
-          >
-            {langgList.map((langg) => (
-              <MenuItem key={langg.id} value={langg.id}>
-                <Checkbox checked={form.language_ids.includes(langg.id)} />
-                <ListItemText primary={langg.name} />
-              </MenuItem>
-            ))}
-          </Select>
-        </Grid>    <Grid item xs={12} md={4}>
-          <MDTypography variant="caption">Countries</MDTypography> &nbsp;
-
-          <Select
-            multiple
-            fullWidth
-            value={form.country_ids}
-            onChange={(e) => handleChange("country_ids", e.target.value)}
-            renderValue={(selected) => selected.join(", ")}
-          >
-            {countriesList.map((country) => (
-              <MenuItem key={country.id} value={country.id}>
-                <Checkbox checked={form.country_ids.includes(country.id)} />
-                <ListItemText primary={country.name} />
-              </MenuItem>
-            ))}
-          </Select>
+        <Grid item xs={12} md={4} mt={2}>
+          <FormControl fullWidth size="small">
+            <InputLabel id="genres-label" sx={{ fontSize: 12 }}>
+              Languages
+            </InputLabel>
+            <Select
+              labelId="languages-label"
+              multiple
+              value={form.language_ids}
+              label="Languages"
+              onChange={(e) =>
+                handleChangeArray("language_ids", e.target.value)
+              }
+              renderValue={(selected) =>
+                selected
+                  .map((id) => langgList.find((g) => g.id === id)?.name)
+                  .filter(Boolean)
+                  .join(", ")
+              }
+              sx={{ minHeight: 40, fontSize: 14 }}
+            >
+              {langgList.map((langg) => (
+                <MenuItem key={langg.id} value={langg.id}>
+                  <Checkbox checked={form.language_ids.includes(langg.id)} />
+                  <ListItemText primary={langg.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
 
         {/* Actions */}

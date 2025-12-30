@@ -80,13 +80,13 @@ function Persons() {
                 <EditIcon fontSize="small" />
               </IconButton>
 
-              <IconButton
+              {/* <IconButton
                 color="error"
                 size="small"
                 onClick={() => handleDelete(item.id)}
               >
                 <DeleteIcon fontSize="small" />
-              </IconButton>
+              </IconButton> */}
             </MDBox>
           ),
         }))
@@ -180,22 +180,29 @@ function Persons() {
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
             <Card>
-              <MDBox
-                p={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <MDTypography variant="h5">Persons</MDTypography>
-
-                <MDButton
-                  variant="gradient"
-                  color="info"
-                  onClick={() => setOpen(true)}
-                >
-                  Add Persons
-                </MDButton>
-              </MDBox>
+               <MDBox
+                          mx={2}
+                          mt={-3}
+                          py={1}
+                          px={1}
+                          variant="gradient"
+                          bgColor="secondarys"
+                          display="flex"
+                          borderRadius="lg"
+                          coloredShadow="secondarys"
+                          justifyContent="space-between"
+                        >
+                          <MDTypography variant="h6" color="white">
+                          Persons
+                          </MDTypography>
+                          <MDButton
+                            variant="gradient"
+                            color="added"
+                            onClick={() => setOpen(true)}
+                          >
+                          Add Persons
+                          </MDButton>
+                        </MDBox>
 
               <MDBox pt={3}>
                 {dataList.length > 0 && (

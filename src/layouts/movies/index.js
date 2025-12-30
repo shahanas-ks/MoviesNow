@@ -80,13 +80,13 @@ function Movies() {
                 <EditIcon fontSize="small" />
               </IconButton>
 
-              <IconButton
+              {/* <IconButton
                 color="error"
                 size="small"
                 onClick={() => handleDelete(item.id)}
               >
                 <DeleteIcon fontSize="small" />
-              </IconButton>
+              </IconButton> */}
             </MDBox>
           ),
         }))
@@ -214,7 +214,7 @@ function Movies() {
               </MDBox>
             </Card>
           </Grid>
-          <Grid item xs={12} lg={12}>
+          {/* <Grid item xs={12} lg={12}>
             <Card>
               <MDBox
                 p={2}
@@ -245,7 +245,7 @@ function Movies() {
                 )}
               </MDBox>
             </Card>
-          </Grid>
+          </Grid> */}
         </Grid>
       </MDBox>
 
