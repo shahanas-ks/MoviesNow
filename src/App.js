@@ -1,22 +1,10 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import PrivateRoute from "PrivateRoute";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -68,6 +56,12 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  useEffect(() => {
+  const token = localStorage.getItem("jwt");
+  if (!token && !pathname.includes("/authentication")) {
+    window.location.replace("/authentication/sign-in");
+  }
+}, []);
 
   // Cache for the rtl
   useMemo(() => {
@@ -115,9 +109,26 @@ export default function App() {
         return getRoutes(route.collapse);
       }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+   if (route.route) {
+  const token = localStorage.getItem("jwt");
+  const isAuthRoute = route.route.includes("/authentication");
+
+  return (
+    <Route
+      key={route.key}
+      path={route.route}
+      element={
+        isAuthRoute ? (
+          route.component
+        ) : (
+          <PrivateRoute>{route.component}</PrivateRoute>
+        )
       }
+    />
+  );
+}
+
+      
 
       return null;
     });
@@ -167,7 +178,16 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route
+  path="*"
+  element={
+    localStorage.getItem("jwt") ? (
+      <Navigate to="/dashboard" />
+    ) : (
+      <Navigate to="/authentication/sign-in" />
+    )
+  }
+/>
         </Routes>
       </ThemeProvider>
     </CacheProvider>

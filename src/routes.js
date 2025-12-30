@@ -5,6 +5,9 @@ import Persons from "layouts/persons";
 import Genres from "layouts/genres";
 import Languages from "layouts/languages";
 import Countries from "layouts/countries";
+import Podcasts from "layouts/podcasts";
+import Reviews from "layouts/reviews";
+
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -63,18 +66,27 @@ const routes = [
   {
     type: "collapse",
     name: "Podcasts",
-    key: "sign-in",
+    key: "podcasts",
     icon: <Icon fontSize="small">radio</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
+    route: "/podcasts",
+    component: <Podcasts />,
   },
   {
     type: "collapse",
     name: "Reviews",
-    key: "sign-up",
+    key: "reviews",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
+    route: "/reviews",
+    component: <Reviews />,
+    
+  },
+    {
+    type: "route",
+    // name: "login",
+    key: "sign-in",
+    // icon: <Icon fontSize="small">radio</Icon>,
+    route: "/authentication/sign-in",
+    component: <SignIn />,
   },
 ];
 

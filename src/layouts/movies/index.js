@@ -170,7 +170,7 @@ function Movies() {
       </MDModal>
       <ConfirmDialog
         open={openConfirm}
-        title="Delete Language"
+        title="Confirm Delete"
         biography="Are you sure you want to delete this? This action cannot be undone."
         confirmText="Delete"
         onConfirm={handleConfirmDelete}

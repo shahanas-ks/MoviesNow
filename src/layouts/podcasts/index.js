@@ -9,11 +9,9 @@ import MDSnackbar from "components/MDSnackbar";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-// import { addGenres } from "store/reducers/languageThunk";
-// import { resetGenrestate } from "store/reducers/Genreslice";
 import MDModal from "components/MDModal";
-import AddGenresForm from "./addGenres";
-import { addGenres, getGenres, deletegenres } from "../../apiCalls/genres";
+import AddPodcastsForm from "./addPodcasts";
+import { getpersons, deletepersons } from "../../apiCalls/persons";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,7 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DataTable from "examples/Tables/DataTable";
 import ConfirmDialog from "components/MDConfirmation";
 
-function Genres() {
+function Podcasts() {
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
@@ -36,7 +34,7 @@ function Genres() {
     loadData();
   }, []);
   const loadData = () => {
-    dispatch(getGenres()).then((res) => {
+    dispatch(getpersons()).then((res) => {
       console.log("res", res);
       setdatalist(res?.payload);
     });
@@ -45,15 +43,30 @@ function Genres() {
     if (dataList.length > 0) {
       setRows(
         dataList?.map((item) => ({
-          name: (
+          first_name: (
             <MDTypography variant="button" fontWeight="regular">
-              {item.name}
+              {item.first_name}
+            </MDTypography>
+          ),
+          middle_name: (
+            <MDTypography variant="button" fontWeight="regular">
+              {item.middle_name}
+            </MDTypography>
+          ),
+          last_name: (
+            <MDTypography variant="button" fontWeight="regular">
+              {item.last_name}
+            </MDTypography>
+          ),
+          gender: (
+            <MDTypography variant="button" fontWeight="regular">
+              {item.gender}
             </MDTypography>
           ),
 
-          description: (
+          biography: (
             <MDTypography variant="button" fontWeight="regular">
-              {item.description?.slice(0,80)+"..."}
+              {item.biography ? item.biography?.slice(0, 50) + "..." : ""}
             </MDTypography>
           ),
 
@@ -67,13 +80,13 @@ function Genres() {
                 <EditIcon fontSize="small" />
               </IconButton>
 
-              <IconButton
+              {/* <IconButton
                 color="error"
                 size="small"
                 onClick={() => handleDelete(item.id)}
               >
                 <DeleteIcon fontSize="small" />
-              </IconButton>
+              </IconButton> */}
             </MDBox>
           ),
         }))
@@ -81,8 +94,11 @@ function Genres() {
     }
   }, [dataList]);
   const columns = [
-    { Header: "Genres", accessor: "name", align: "left" },
-    { Header: "Description", accessor: "description", align: "left" },
+    { Header: "First name", accessor: "first_name", align: "left" },
+    { Header: "Middle name", accessor: "middle_name", align: "left" },
+    { Header: "Last name", accessor: "last_name", align: "left" },
+    { Header: "Gender", accessor: "gender", align: "left" },
+    { Header: "Biography", accessor: "biography", align: "center" },
     { Header: "Actions", accessor: "actions", align: "center" },
   ];
 
@@ -102,14 +118,14 @@ function Genres() {
   };
 
   const handleConfirmDelete = () => {
-    dispatch(deletegenres(selectedId)).then((res) => {
+    dispatch(deletepersons(selectedId)).then((res) => {
       if (res?.payload?.id) {
         console.log("res", res);
-        setMessage("Genre deleted successfully");
+        setMessage("Person deleted successfully");
         setOpenSnack(true);
         loadData();
       } else {
-        setMessage("Failed to delete genre");
+        setMessage("Failed to delete Person");
         setOpenSnack(true);
       }
     });
@@ -141,9 +157,10 @@ function Genres() {
           setOpen(false);
           loadData();
         }}
-        title="Add Genres"
+        title="Add Podcasts"
+        width={1200}
       >
-        <AddGenresForm
+        <AddPodcastsForm
           onClose={() => {
             setOpen(false);
             loadData();
@@ -154,45 +171,50 @@ function Genres() {
       <ConfirmDialog
         open={openConfirm}
         title="Confirm Delete"
-        description="Are you sure you want to delete this? This action cannot be undone."
+        biography="Are you sure you want to delete this? This action cannot be undone."
         confirmText="Delete"
         onConfirm={handleConfirmDelete}
         onCancel={() => setOpenConfirm(false)}
       />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} lg={12}>
+          <Grid item xs={12}>
             <Card>
               <MDBox
-                p={2}
+                mx={2}
+                mt={-3}
+                py={1}
+                px={1}
+                variant="gradient"
+                bgColor="secondarys"
                 display="flex"
-                alignItems="center"
+                borderRadius="lg"
+                coloredShadow="secondarys"
                 justifyContent="space-between"
               >
-                <MDTypography variant="h5">Genres</MDTypography>
-
+                <MDTypography variant="h6" color="white">
+                  Podcasts
+                </MDTypography>
                 <MDButton
                   variant="gradient"
-                  color="info"
+                  color="added"
                   onClick={() => setOpen(true)}
                 >
-                  Add Genres
+                  Add podcast
                 </MDButton>
               </MDBox>
-
-              <MDBox pt={3}>
-                {dataList.length > 0 && (
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                    entriesPerPage={false}
-                  />
-                )}
-              </MDBox>
+              {/* <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox> */}
             </Card>
           </Grid>
+          
         </Grid>
       </MDBox>
 
@@ -201,4 +223,4 @@ function Genres() {
   );
 }
 
-export default Genres;
+export default Podcasts;
